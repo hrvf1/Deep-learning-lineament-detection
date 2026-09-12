@@ -25,21 +25,3 @@
 | Seuil final | 0,50 | Maximum d'IoU validation, recherche de 0,05 à 0,95 par pas de 0,01 |
 
 
-
-## Changements d'organisation et contrôles ajoutés
-
-Les chemins personnels et chargements fixes d'anciens modèles sont remplacés par les paramètres du notebook. Après un entraînement, les analyses portent sur le meilleur modèle de **cette exécution**. Le mode modèle enregistré est explicite. Les fichiers d'origine ne sont pas modifiés.
-
-La lecture respecte les pixels NoData déclarés dans les métadonnées raster, les remplace par NaN et les signale. C'est un contrôle plus strict que la lecture brute de certains notebooks ; une source déclarant des valeurs valides comme NoData doit être corrigée avant comparaison. La politique fusion concernant les valeurs invalides du masque est conservée mais n'autorise pas à considérer une zone non annotée comme du fond fiable.
-
-Les états aléatoires, versions, signatures, partitions et statistiques sont enregistrés. La reprise complète et les dossiers uniques sont ajoutés. Les tracés utilisent une convention cohérente, notamment vert/orange/bleu pour VP/FP/FN. Le seuil des widgets est uniquement visuel et ne modifie pas le seuil d'évaluation.
-
-## Limites de reproduction
-
-Les petits tests techniques contrôlent la fidélité des opérations et des architectures, pas la validité scientifique des modèles. Les rasters et checkpoints réels n'ont pas été fournis sous une forme accessible pour cette validation finale. Les 150 époques et les scores historiques ne sont donc pas certifiés ici.
-
-Les différences d'ordre de consommation des générateurs PyTorch et les contrôles déterministes peuvent modifier la trajectoire d'entraînement par rapport à une exécution historique, même avec une graine égale. Les tests vérifient les prédictions à **poids identiques**, ainsi que la répétabilité et la reprise dans l'environnement testé.
-
-Le split aléatoire ne garantit pas l'indépendance spatiale des ensembles. Des rasters ayant un CRS identique ne suffisent pas à garantir une comparabilité scientifique : résolution, unités, calcul des dérivés et conventions d'annotation comptent également.
-
-Cette version part de rasters et masques préparés. Elle ne crée pas d'annotations depuis un fichier vectoriel, ne calcule pas implicitement pente/hillshade, ne télécharge pas Sentinel et ne reconstruit pas de mosaïque GeoTIFF à partir des prédictions. Un shapefile complet ou une couche de polylignes d'un GeoPackage déjà préparé peut toutefois être fourni facultativement pour analyser les longueurs et orientations des annotations vectorielles ; le fichier n'est ni rasterisé ni modifié par le pipeline et n'intervient pas dans l'entraînement. Lorsqu'un GeoPackage possède plusieurs couches, le nom de la couche doit être donné explicitement.
