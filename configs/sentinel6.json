@@ -1,0 +1,63 @@
+{
+  "taille_patch": 64,
+  "pas": 64,
+  "graine": 42,
+  "proportions": [
+    0.7,
+    0.15,
+    0.15
+  ],
+  "percentiles": [
+    2,
+    98
+  ],
+  "transformations": [
+    "original",
+    "rotation90",
+    "rotation180",
+    "rotation270",
+    "miroir_h",
+    "miroir_v"
+  ],
+  "features": [
+    32,
+    64,
+    128,
+    256
+  ],
+  "epoques": 150,
+  "batch_size": 16,
+  "lr": 0.0001,
+  "weight_decay": 0.0001,
+  "metriques": "notebooks",
+  "seuil": 0.5,
+  "optimiser_seuil": false,
+  "pas_seuil": 0.05,
+  "nodata": "erreur",
+  "masque": "binaire",
+  "nom": "sentinel6",
+  "entrees": [
+    {
+      "cle": "sentinel",
+      "bandes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "noms": [
+        "B2",
+        "B3",
+        "B4",
+        "B8",
+        "B11",
+        "B12"
+      ],
+      "cmap": "gray",
+      "unite": "valeur du fichier",
+      "nombre_bandes_attendu": 6
+    }
+  ]
+}

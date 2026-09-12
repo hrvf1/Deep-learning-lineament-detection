@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "onhym-lineaments"
+version = "0.4.0"
+description = "Expériences U-Net de cartographie des linéaments, réutilisables dans Colab"
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.24,<3", "pandas>=2,<4", "matplotlib>=3.7,<4", "rasterio>=1.3,<2", "geopandas>=0.14,<2", "torch>=2.2,<3", "ipywidgets>=8,<9"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "nbformat>=5", "nbclient>=0.10", "ipykernel>=6"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.data-files]
+"share/onhym-lineaments/configs" = ["configs/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src", "tests"]
+addopts = "-ra"

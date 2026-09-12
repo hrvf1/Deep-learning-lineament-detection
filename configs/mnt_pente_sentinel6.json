@@ -1,0 +1,85 @@
+{
+  "taille_patch": 64,
+  "pas": 64,
+  "graine": 42,
+  "proportions": [
+    0.7,
+    0.15,
+    0.15
+  ],
+  "percentiles": [
+    2,
+    98
+  ],
+  "transformations": [
+    "original",
+    "rotation90",
+    "rotation180",
+    "rotation270",
+    "miroir_h",
+    "miroir_v"
+  ],
+  "features": [
+    32,
+    64,
+    128,
+    256
+  ],
+  "epoques": 150,
+  "batch_size": 16,
+  "lr": 0.0001,
+  "weight_decay": 0.0001,
+  "metriques": "fusion",
+  "seuil": 0.5,
+  "optimiser_seuil": true,
+  "pas_seuil": 0.01,
+  "nodata": "exclure_patchs",
+  "masque": "positif",
+  "nom": "mnt_pente_sentinel6",
+  "entrees": [
+    {
+      "cle": "mnt",
+      "bandes": [
+        1
+      ],
+      "noms": [
+        "MNT"
+      ],
+      "cmap": "terrain",
+      "unite": "m"
+    },
+    {
+      "cle": "pente",
+      "bandes": [
+        1
+      ],
+      "noms": [
+        "Pente"
+      ],
+      "cmap": "viridis",
+      "unite": "unité du fichier"
+    },
+    {
+      "cle": "sentinel",
+      "bandes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "noms": [
+        "B2",
+        "B3",
+        "B4",
+        "B8",
+        "B11",
+        "B12"
+      ],
+      "cmap": "gray",
+      "unite": "valeur du fichier",
+      "nombre_bandes_attendu": 6
+    }
+  ]
+}
