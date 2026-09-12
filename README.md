@@ -146,20 +146,5 @@ Chaque nouvel entraînement crée un dossier distinct contenant notamment le mei
 
 Les prédictions sont exportées **par patch**, avec leurs positions. La reconstruction d’une mosaïque GeoTIFF complète ne fait pas partie de cette version.
 
-## Reproductibilité et validation du code
 
-Les graines aléatoires, configurations, partitions, statistiques de normalisation et versions logicielles sont conservées pour documenter chaque exécution. Les résultats numériques peuvent néanmoins varier avec les données, le matériel et les versions des bibliothèques.
 
-La validation locale comprend **33 tests sur des données synthétiques**, couvrant notamment la fidélité des prétraitements aux fonctions d’origine, le contrôle de chemins de fichiers librement choisis, l’analyse de polylignes depuis un shapefile et des GeoPackages à une ou plusieurs couches, le chargement des poids, la reprise d’entraînement et l’exécution des cellules des quatre notebooks. Un premier entraînement technique du notebook MNT seul a également été exécuté localement avec succès sur les données du projet. Ces contrôles vérifient le fonctionnement du code ; ils ne reproduisent pas les scores historiques présentés plus haut. L’exécution dans l’interface hébergée Colab et les entraînements réels des trois autres expériences restent à vérifier.
-
-```bash
-python -m pip install -e ".[dev]"
-python -m pytest
-```
-
-Les détails sont disponibles dans le [bilan de validation](docs/validation.md), les [protocoles et limites](docs/protocoles.md) et le [guide d’utilisation](docs/utilisation.md). La préparation des liens avant publication est décrite dans le [guide de publication](docs/publication.md).
-
----
-
-**Achraf Ait Alla** · Génie Minéral, École Mohammadia d’Ingénieurs  
-Stage de fin d’année à l’ONHYM · Année universitaire 2025–2026
