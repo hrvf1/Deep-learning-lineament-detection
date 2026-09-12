@@ -52,25 +52,6 @@ La comparaison repose sur une architecture U-Net commune et sur les mêmes régl
 
 L’évaluation associe l’**IoU**, le **Dice/F1**, la **précision** et le **rappel** à une lecture des cartes de probabilités et des erreurs. Cette analyse qualitative permet d’examiner la continuité des tracés, les omissions et les détections supplémentaires que les scores globaux ne décrivent pas à eux seuls.
 
-## Résultats et enseignements de l’étude
-
-Les résultats ci-dessous sont ceux consignés dans mon rapport de stage, au tableau 6.10, page 58. Ils correspondent aux expériences historiques sur la zone étudiée ; ils ne proviennent pas d’une nouvelle exécution du code refactorisé.
-
-| Configuration | IoU | Dice/F1 | Précision | Rappel |
-|---|---:|---:|---:|---:|
-| MNT seul | 0,1044 | 0,1890 | 0,2478 | 0,1528 |
-| MNT + pente + ombrage | 0,0967 | 0,1764 | 0,1800 | 0,1729 |
-| Sentinel-2 — 6 bandes | 0,2131 | 0,3513 | 0,3974 | 0,3148 |
-| MNT + pente + Sentinel-2 | 0,2147 | 0,3535 | 0,3431 | 0,3645 |
-
-Sur cette scène, les configurations utilisant Sentinel-2 obtiennent de meilleurs scores que les configurations purement topographiques. L’ajout de la pente et de l’ombrage au MNT n’améliore pas les résultats. La fusion présente une IoU très proche de Sentinel-2 seul, avec un rappel plus élevé et une précision plus faible : l’ajout des couches topographiques n’apporte donc pas de gain net sur l’IoU dans les conditions étudiées.
-
-Ces valeurs doivent être interprétées avec les conditions d’évaluation de chaque expérience : les trois premières utilisent un seuil de 0,50, tandis que la fusion sélectionne son seuil sur la validation. La comparaison reste limitée à la zone, aux données et aux protocoles employés.
-
-Le travail met également en évidence deux difficultés centrales. D’une part, le volume et la diversité des données disponibles restent insuffisants pour limiter durablement le surapprentissage. D’autre part, les annotations manuelles ne sont pas exhaustives : certaines prédictions suivent des formes linéaires visibles mais absentes du masque. Leur pertinence géologique nécessite une validation experte indépendante ; une détection supplémentaire ne peut pas être considérée automatiquement comme correcte.
-
-Les principales perspectives sont ainsi l’élargissement des zones d’apprentissage, la révision des annotations avec des géologues et une évaluation sur des secteurs spatialement indépendants. Le split aléatoire utilisé ici ne suffit pas à démontrer une capacité de généralisation à une nouvelle région.
-
 ## Utiliser le projet
 
 Chaque expérience dispose de son propre notebook, avec une cellule de paramètres et des explications Markdown au-dessus des traitements. Il est possible d’entraîner un modèle avec de nouvelles données ou de charger un checkpoint compatible pour obtenir des prédictions.
