@@ -62,12 +62,12 @@ Les notebooks prennent en entrée des **GeoTIFF déjà préparés et alignés**.
 
 Un **masque de linéaments** est nécessaire pour entraîner et pour calculer les métriques. Avec un modèle enregistré, la prédiction seule peut être réalisée sans masque. Les données et checkpoints historiques ne sont pas distribués dans ce dépôt.
 
-Le **fichier vectoriel des linéaments est facultatif**. Il sert uniquement à reproduire l'analyse descriptive des annotations : nombre de linéaments, longueurs, statistiques et rose des orientations. Pour utiliser cette option, placer **au choix** dans `data/ma_zone` :
+Le **fichier vectoriel des linéaments est facultatif**. Il sert uniquement à reproduire l'analyse descriptive des annotations : nombre de linéaments, longueurs, statistiques et rose des orientations. Le fichier peut conserver son propre nom et rester dans le dossier choisi par l'utilisateur. Les formats acceptés sont :
 
 - un shapefile complet : `lineaments.shp`, `lineaments.shx`, `lineaments.dbf` et `lineaments.prj`, tous avec le même nom de base ; `lineaments.cpg` peut être ajouté s'il existe ;
 - ou un GeoPackage : `lineaments.gpkg`, qui tient dans un seul fichier.
 
-Choisir ensuite `ACTIVER_ANALYSE_LINEAMENTS=True` et faire pointer `CHEMIN_LINEAMENTS` vers le fichier `.shp` ou `.gpkg`. Pour un shapefile ou un GeoPackage à une seule couche, conserver `COUCHE_LINEAMENTS=None`. Si le GeoPackage contient plusieurs couches, indiquer dans `COUCHE_LINEAMENTS` le nom exact de la couche de linéaments ; sinon le programme s'arrête en affichant les couches disponibles.
+Choisir ensuite `ACTIVER_ANALYSE_LINEAMENTS=True` et faire pointer `CHEMIN_LINEAMENTS` vers le chemin exact du fichier `.shp` ou `.gpkg`. Pour un shapefile ou un GeoPackage à une seule couche, conserver `COUCHE_LINEAMENTS=None`. Si le GeoPackage contient plusieurs couches, indiquer dans `COUCHE_LINEAMENTS` le nom exact de la couche de linéaments ; sinon le programme s'arrête en affichant les couches disponibles.
 
 Dans les deux formats, la couche choisie doit contenir uniquement des polylignes (`LineString` ou `MultiLineString`), posséder le même CRS que les rasters et recouper leur emprise.
 
@@ -83,16 +83,17 @@ Cette analyse n'intervient ni dans le découpage, ni dans l'entraînement, ni da
 <!-- COLAB:END -->
 
 1. Exécuter la cellule d’installation ; elle récupère le code commun du dépôt.
-2. Dans la cellule de paramètres, indiquer les fichiers d’entrée, le masque et le dossier de sortie.
-3. Pour utiliser Google Drive, activer `UTILISER_DRIVE` et renseigner des chemins vers son propre Drive.
-4. Ajuster les réglages souhaités, puis exécuter les cellules dans l’ordre en examinant les diagnostics et les figures.
-5. Retrouver les modèles, métriques et visualisations dans le dossier de résultats de l’exécution.
+2. Choisir `UTILISER_DRIVE=True` pour monter Google Drive, ou laisser `False` pour des fichiers locaux ou chargés dans la session.
+3. Dans la cellule de paramètres, renseigner le chemin exact de chaque entrée, du masque et du dossier de sortie. Aucun nom de fichier ni aucune arborescence n'est imposé.
+4. Exécuter l'initialisation et vérifier le tableau **donnée / chemin / statut**. Le notebook signale immédiatement tout chemin absent ou format inattendu.
+5. Ajuster les réglages souhaités, puis exécuter les cellules dans l’ordre en examinant le diagnostic géospatial et les figures.
+6. Retrouver les modèles, métriques et visualisations dans le dossier de sortie choisi.
 
 Pour conserver les résultats après la fin d’une session Colab, choisir un dossier de sortie sur Drive. Un GPU est préférable pour les entraînements longs.
 
 ### Exemple : entraîner sur un nouveau MNT
 
-Dans le notebook **01 — MNT seul**, renseigner le chemin du MNT et celui de son masque, puis conserver `MODE="entrainer"`. Un premier essai avec `EPOQUES=2` permet de vérifier le parcours avant de lancer un entraînement plus long. Les paramètres par défaut du protocole sont conservés dans `configs/mnt.json`.
+Dans le notebook **01 — MNT seul**, conserver `MODE="entrainer"`, puis renseigner `CHEMIN_MNT`, `CHEMIN_MASQUE` et `DOSSIER_SORTIE`. Les fichiers peuvent s'appeler, par exemple, `dem_tichla_10m.tif` et `annotations_finales.tif` et se trouver dans des dossiers différents. Avec Drive, les chemins commencent généralement par `/content/drive/MyDrive/`. Un premier essai avec `EPOQUES=2` permet de vérifier le parcours avant de lancer un entraînement plus long. Les paramètres par défaut du protocole sont conservés dans `configs/mnt.json`.
 
 Deux paramètres répondent à des besoins différents :
 
@@ -112,7 +113,7 @@ python -m pip install -r requirements.txt
 python -m pip install ipykernel
 ```
 
-Ouvrir ensuite un notebook dans VS Code ou Jupyter, sélectionner l’environnement Python correspondant et renseigner les chemins locaux. Conserver `UTILISER_DRIVE=False` dans ce cas.
+Ouvrir ensuite un notebook dans VS Code ou Jupyter, sélectionner l’environnement Python correspondant et renseigner les chemins locaux exacts. Les fichiers peuvent porter les noms et suivre l'organisation souhaités. Conserver `UTILISER_DRIVE=False` dans ce cas.
 
 ## Organisation du code et sorties
 
@@ -135,7 +136,7 @@ Les prédictions sont exportées **par patch**, avec leurs positions. La reconst
 
 Les graines aléatoires, configurations, partitions, statistiques de normalisation et versions logicielles sont conservées pour documenter chaque exécution. Les résultats numériques peuvent néanmoins varier avec les données, le matériel et les versions des bibliothèques.
 
-La validation locale comprend **31 tests sur des données synthétiques**, couvrant notamment la fidélité des prétraitements aux fonctions d’origine, l’analyse de polylignes depuis un shapefile et des GeoPackages à une ou plusieurs couches, le chargement des poids, la reprise d’entraînement et l’exécution des cellules des quatre notebooks. Un premier entraînement technique du notebook MNT seul a également été exécuté localement avec succès sur les données du projet. Ces contrôles vérifient le fonctionnement du code ; ils ne reproduisent pas les scores historiques présentés plus haut. L’exécution dans l’interface hébergée Colab et les entraînements réels des trois autres expériences restent à vérifier.
+La validation locale comprend **33 tests sur des données synthétiques**, couvrant notamment la fidélité des prétraitements aux fonctions d’origine, le contrôle de chemins de fichiers librement choisis, l’analyse de polylignes depuis un shapefile et des GeoPackages à une ou plusieurs couches, le chargement des poids, la reprise d’entraînement et l’exécution des cellules des quatre notebooks. Un premier entraînement technique du notebook MNT seul a également été exécuté localement avec succès sur les données du projet. Ces contrôles vérifient le fonctionnement du code ; ils ne reproduisent pas les scores historiques présentés plus haut. L’exécution dans l’interface hébergée Colab et les entraînements réels des trois autres expériences restent à vérifier.
 
 ```bash
 python -m pip install -e ".[dev]"

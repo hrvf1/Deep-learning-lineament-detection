@@ -5,9 +5,34 @@ import pytest
 from lineaments.preprocessing import extraire_patchs,repartir_indices,calculer_stats_normalisation,normaliser_par_canal
 from lineaments.augmentation import augmenter_patchs
 from lineaments.config import charger_configuration
+from lineaments.data import controler_chemins
 
 spec=importlib.util.spec_from_file_location("source_utiles",Path(__file__).parent/"reference"/"fonctions_utiles.py")
 source=importlib.util.module_from_spec(spec);spec.loader.exec_module(source)
+
+
+def test_controle_chemins_libres(tmp_path):
+    mnt = tmp_path / "mon_dem_avec_un_nom_libre.tif"
+    masque = tmp_path / "annotations_zone_sud.tiff"
+    mnt.touch(); masque.touch()
+    table, erreurs = controler_chemins(
+        {"mnt": mnt}, masque=masque, sortie=tmp_path / "sorties_libres"
+    )
+    assert not erreurs
+    assert table.loc["Entrée — mnt", "statut"] == "prêt"
+    assert table.loc["Masque", "statut"] == "prêt"
+    assert table.loc["Dossier de sortie", "statut"] == "sera créé"
+
+
+def test_controle_chemins_signale_absence_et_format(tmp_path):
+    table, erreurs = controler_chemins(
+        {"mnt": tmp_path / "absent.tif"},
+        masque=tmp_path / "masque.png",
+        sortie=None,
+    )
+    assert table.loc["Entrée — mnt", "statut"] == "introuvable"
+    assert table.loc["Masque", "statut"] == "format inattendu"
+    assert len(erreurs) == 3
 
 
 @pytest.mark.parametrize("canaux",[1,3,6,8])

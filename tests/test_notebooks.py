@@ -51,6 +51,9 @@ def test_cellules_entrainement_et_modele_enregistre(tmp_path, monkeypatch, nom, 
     assert "COUCHE_LINEAMENTS = None" in source
     assert "couche=COUCHE_LINEAMENTS" in source
     assert "MAX_PATCHS_TRAIN" not in source
+    assert "DOSSIER_DONNEES" not in source
+    assert "CHEMIN_MASQUE = None" in source
+    assert "controler_chemins" in source
     fichiers = creer_donnees_demo(tmp_path / "donnees", taille=128)
     cfg = charger_configuration(preset)
     cfg["features"] = [4, 8, 16, 32]  # Architecture par défaut testée séparément à poids identiques.

@@ -2,7 +2,7 @@
 
 ## Utilisation courante
 
-Modifier la cellule « Vos fichiers et paramètres » du notebook sélectionné. Toutes les cellules suivantes utilisent ces valeurs. Pour changer une préparation, relancer à partir de cette cellule : les données préparées et résultats en mémoire seront recalculés.
+Modifier la cellule « Vos fichiers et paramètres » du notebook sélectionné. Chaque entrée possède son propre chemin : aucun dossier ni nom de fichier n'est imposé. Toutes les cellules suivantes utilisent ces valeurs. Pour changer une préparation, relancer à partir de cette cellule : les données préparées et résultats en mémoire seront recalculés.
 
 | Appel dans le notebook | Résultat |
 |---|---|
@@ -27,6 +27,14 @@ Modifier la cellule « Vos fichiers et paramètres » du notebook sélectionné.
 | `exp.explorer_predictions()` | Interface interactive de sélection des exemples |
 | `exp.exporter(predictions=True)` | Paramètres, figures, positions et probabilités calculées |
 
+## Choisir librement les fichiers
+
+Dans Colab, choisir `UTILISER_DRIVE=True` pour monter Google Drive, puis renseigner les chemins complets commençant généralement par `/content/drive/MyDrive/`. Avec des fichiers chargés directement dans la session, utiliser leurs chemins sous `/content/`. Sur ordinateur, conserver `UTILISER_DRIVE=False` et indiquer des chemins locaux absolus ou relatifs.
+
+Les variables proposées dépendent de l'expérience : `CHEMIN_MNT`, `CHEMIN_PENTE`, `CHEMIN_HILLSHADE`, `CHEMIN_SENTINEL`, `CHEMIN_MASQUE`, puis `DOSSIER_SORTIE`. Elles acceptent les noms et dossiers choisis par l'utilisateur. `CHEMIN_MODELE` n'est requis qu'en mode `modele_enregistre` et `CHEMIN_LINEAMENTS` uniquement lorsque l'analyse vectorielle est activée.
+
+La cellule d'initialisation affiche un tableau récapitulatif. `prêt` indique un fichier trouvé avec une extension attendue ; `sera créé` concerne un dossier de sortie encore absent. Les statuts `non renseigné`, `introuvable` ou `format inattendu` bloquent la suite avec un message ciblé. Le diagnostic géospatial détaillé intervient ensuite.
+
 ## Données attendues
 
 MNT, pente et hillshade : GeoTIFF à une bande. Sentinel : GeoTIFF à six bandes, B2/B3/B4/B8/B11/B12. Respecter les unités, résolutions et traitements de l'expérience choisie pour une comparaison scientifique. L'échelle spatiale vue par le réseau vaut taille du patch × résolution du pixel : un patch 64 à 10 m et un patch 64 à 30 m ne couvrent pas la même zone.
@@ -35,7 +43,7 @@ L'entraînement nécessite des annotations couvrant la zone et définissant le f
 
 Le diagnostic ne calcule ni annotations ni dérivés topographiques ; il ne rééchantillonne pas automatiquement les données. Une résolution ou une grille incompatible doit être corrigée en amont. Le CRS, les dimensions et la transformation des pixels sont contrôlés avant extraction.
 
-L'analyse descriptive des linéaments est facultative et s'applique au fichier vectoriel original, pas au masque raster ni aux prédictions. Placer dans `data/ma_zone` soit un shapefile complet (`lineaments.shp`, `.shx`, `.dbf`, `.prj`, et éventuellement `.cpg`, avec le même nom de base), soit un GeoPackage unique (`lineaments.gpkg`). Régler ensuite `ACTIVER_ANALYSE_LINEAMENTS=True` et faire pointer `CHEMIN_LINEAMENTS` vers le `.shp` ou le `.gpkg`.
+L'analyse descriptive des linéaments est facultative et s'applique au fichier vectoriel original, pas au masque raster ni aux prédictions. Le fichier peut se trouver dans n'importe quel dossier. Renseigner soit le chemin d'un shapefile complet (`.shp`, `.shx`, `.dbf`, `.prj`, et éventuellement `.cpg`, avec le même nom de base), soit celui d'un GeoPackage `.gpkg`. Régler ensuite `ACTIVER_ANALYSE_LINEAMENTS=True` et faire pointer `CHEMIN_LINEAMENTS` vers ce chemin exact.
 
 `COUCHE_LINEAMENTS=None` convient au shapefile et à un GeoPackage contenant une seule couche, qui est alors choisie automatiquement. Si le GeoPackage contient plusieurs couches, donner leur nom exact, par exemple `COUCHE_LINEAMENTS="lineaments_interpretes"`. Sans ce choix, le programme refuse l'ambiguïté et affiche la liste des couches disponibles. `COUCHE_LINEAMENTS` doit rester à `None` avec un shapefile.
 

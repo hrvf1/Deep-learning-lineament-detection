@@ -12,6 +12,7 @@ Validation locale du 12 septembre 2026. Aucun résultat scientifique ONHYM n'est
 - Entraînement court, sauvegarde, rechargement et reproduction des prédictions à poids identiques.
 - Reprise d'un entraînement interrompu : poids identiques à une exécution continue dans l'environnement testé.
 - Contrôles d'alignement, patches invalides, limites du train et statistiques conservées en inférence.
+- Contrôle des chemins d'entrée, de masque, de vecteur, de modèle et de sortie sans imposer de nom de fichier ni d'arborescence.
 - Analyse de fichiers vectoriels synthétiques : shapefile complet, GeoPackage à couche unique, sélection explicite dans un GeoPackage multicouche, longueurs et orientations axiales.
 - Exécution séquentielle des cellules des quatre notebooks en mode entraînement, puis en mode modèle enregistré avec leur partition de test sauvegardée.
 - Exécution du notebook MNT en prédiction sans masque.
@@ -49,4 +50,4 @@ L'exécution dans l'interface hébergée Google Colab, le rendu des widgets dans
 
 Les avertissements de dépréciation d'Affine/Rasterio dans l'environnement testé ne sont pas des erreurs de calcul. Le chargement d'un checkpoint historique signale explicitement les limites de reconstitution de son ancien split.
 
-Pour relancer les contrôles : installer les dépendances de développement puis exécuter `python -m pytest` à la racine du projet. La suite contient 31 tests.
+Pour relancer les contrôles : installer les dépendances de développement puis exécuter `python -m pytest` à la racine du projet. La suite contient 33 tests.

@@ -7,6 +7,57 @@ import pandas as pd
 import rasterio
 
 
+def controler_chemins(entrees, masque=None, lineaments=None, modele=None, sortie=None):
+    """Résume les chemins choisis sans imposer de noms ni d'arborescence."""
+    lignes = []
+    erreurs = []
+
+    def ajouter_fichier(role, chemin, extensions, obligatoire=True):
+        if chemin is None or not str(chemin).strip():
+            statut = "non renseigné"
+            lignes.append({"donnée": role, "chemin": "—", "statut": statut})
+            if obligatoire:
+                erreurs.append(f"{role} : renseigner un chemin.")
+            return
+        p = Path(chemin).expanduser().resolve()
+        extension_valide = p.suffix.lower() in extensions
+        existe = p.is_file()
+        if not extension_valide:
+            statut = "format inattendu"
+            erreurs.append(f"{role} : formats acceptés {', '.join(sorted(extensions))} ; reçu {p.suffix or 'sans extension'}.")
+        elif not existe:
+            statut = "introuvable"
+            erreurs.append(f"{role} : fichier introuvable : {p}")
+        else:
+            statut = "prêt"
+        lignes.append({"donnée": role, "chemin": str(p), "statut": statut})
+
+    for cle, chemin in entrees.items():
+        ajouter_fichier(f"Entrée — {cle}", chemin, {".tif", ".tiff"})
+    if masque is None:
+        lignes.append({"donnée": "Masque", "chemin": "—", "statut": "non fourni"})
+    else:
+        ajouter_fichier("Masque", masque, {".tif", ".tiff"})
+    if lineaments is not None:
+        ajouter_fichier("Linéaments", lineaments, {".gpkg", ".shp"})
+    if modele is not None:
+        ajouter_fichier("Modèle", modele, {".pt", ".pth"})
+
+    if sortie is None or not str(sortie).strip():
+        lignes.append({"donnée": "Dossier de sortie", "chemin": "—", "statut": "non renseigné"})
+        erreurs.append("Dossier de sortie : renseigner un chemin.")
+    else:
+        p = Path(sortie).expanduser().resolve()
+        if p.exists() and not p.is_dir():
+            statut = "ce chemin désigne un fichier"
+            erreurs.append(f"Dossier de sortie : un dossier est attendu : {p}")
+        else:
+            statut = "prêt" if p.is_dir() else "sera créé"
+        lignes.append({"donnée": "Dossier de sortie", "chemin": str(p), "statut": statut})
+
+    return pd.DataFrame(lignes).set_index("donnée"), erreurs
+
+
 @dataclass
 class Couche:
     nom: str
