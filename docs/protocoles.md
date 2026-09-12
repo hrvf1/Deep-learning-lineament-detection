@@ -7,8 +7,6 @@
 | Sentinel-2 | `04_stack_sentinel2_6bandes(1).ipynb` et `(2)` | B2, B3, B4, B8, B11, B12 |
 | Fusion | `unet_mnt_pente_sentinel6_150ep(1).py` | MNT, pente, B2, B3, B4, B8, B11, B12 |
 
-Les deux fichiers Sentinel fournis contiennent les mêmes sources de cellules ; ils correspondent à une seule expérience. Le module `fonctions_utiles.py` fourni sert de référence aux traitements communs. Le rapport sert de contexte scientifique et n'est pas distribué dans ce dépôt.
-
 ## Paramètres repris
 
 - Patches 64 × 64, pas 64, bordures incomplètes écartées.
