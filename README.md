@@ -2,11 +2,25 @@
 
 **Étude comparative de données topographiques et Sentinel-2 avec U-Net — secteur de Tichla, Maroc**
 
-J’ai réalisé ce projet dans le cadre de mon stage de fin d’année en Génie Minéral à l’École Mohammadia d’Ingénieurs, au sein de l’Office National des Hydrocarbures et des Mines (ONHYM). J’y ai étudié l’apport de l’apprentissage profond à la cartographie des linéaments, en comparant plusieurs combinaisons de données topographiques et satellitaires.
+## Présentation du projet
 
-Mon objectif était de comprendre quelles informations permettent au modèle de mieux identifier les structures linéaires dans un contexte saharien à faible relief. J’ai construit une chaîne de segmentation avec U-Net, depuis la préparation des données et des annotations jusqu’à l’évaluation quantitative et à l’examen des prédictions.
+Ce projet a été réalisé dans le cadre de mon stage de fin d’année en Génie Minéral à l’École Mohammadia d’Ingénieurs, au sein de l’Office National des Hydrocarbures et des Mines (ONHYM). Il étudie l’apport de l’apprentissage profond à la cartographie automatique des linéaments dans le secteur de Tichla, situé dans la région de Dakhla-Oued Eddahab au sud du Maroc. Cette zone saharienne d’environ 400 km² se caractérise par une couverture végétale très faible et un relief peu marqué, rendant l’expression topographique de certaines structures géologiques particulièrement discrète.
 
-Ce dépôt rassemble les quatre configurations d’entrée retenues pour la comparaison. J’ai regroupé leurs traitements dans des fonctions communes et organisé les notebooks pour rendre la démarche consultable, reproductible et réutilisable sur d’autres jeux de données.
+L’étude combine des informations topographiques et spectrales. La topographie est représentée par le modèle Copernicus DEM GLO-30, dont la résolution native est de 30 m, ainsi que par deux variables dérivées sous QGIS : la pente et l’ombrage du relief calculé avec un azimut de 315° et une élévation solaire de 45°. L’information spectrale provient d’une image Sentinel-2 L2A acquise en saison sèche et sans couverture nuageuse. Six bandes ont été retenues : B2, B3, B4 et B8 à 10 m de résolution, ainsi que B11 et B12 à 20 m. Toutes les couches ont été projetées en UTM zone 28N (EPSG:32628), alignées sur une grille commune de 10 m et découpées sur une emprise de 1 992 × 2 004 pixels. Le rééchantillonnage du MNT et des bandes SWIR assure leur alignement géométrique, sans augmenter leur résolution spatiale réelle.
+
+Les linéaments de référence ont été interprétés et digitalisés manuellement sous QGIS à partir des images Sentinel-2 et de plusieurs ombrages topographiques, puis rasterisés sous la forme d’un masque binaire. Un réseau U-Net de segmentation sémantique a ensuite été évalué selon quatre configurations : MNT seul ; MNT, pente et ombrage à 315° ; six bandes Sentinel-2 ; puis fusion du MNT, de la pente et des six bandes Sentinel-2. Ce dépôt transforme cette démarche expérimentale en une chaîne réutilisable comprenant le contrôle géospatial, l’extraction de patches de 64 × 64 pixels, la normalisation, l’augmentation des données, l’entraînement, l’évaluation, la prédiction et l’analyse descriptive facultative des linéaments vectoriels.
+| Élément | Caractéristiques utilisées dans l’étude |
+|---|---|
+| Zone d’étude | Secteur de Tichla, Dakhla-Oued Eddahab, environ 400 km² |
+| Donnée topographique | Copernicus DEM GLO-30, résolution native de 30 m |
+| Dérivés topographiques | Pente et hillshade 315°, élévation solaire de 45° |
+| Données satellitaires | Sentinel-2 L2A, image de saison sèche sans nuages |
+| Bandes Sentinel-2 | B2, B3, B4, B8 à 10 m ; B11 et B12 à 20 m |
+| Grille de travail | 10 m, 1 992 × 2 004 pixels |
+| Système de coordonnées | UTM zone 28N — EPSG:32628 |
+| Annotations | Linéaments digitalisés manuellement sous QGIS, puis rasterisés |
+| Modèle | U-Net de segmentation sémantique |
+| Taille des patches | 64 × 64 pixels |
 
 ## Contexte et question de recherche
 
