@@ -42,12 +42,3 @@ Les cellules des notebooks sont exécutées dans un espace de noms Python partag
 
 Le programme enregistre les versions de chaque nouvelle exécution dans `environnement.json`. Les plages de dépendances du projet sont des plages d'installation ; toutes leurs combinaisons n'ont pas été testées.
 
-## À vérifier avec les fichiers réels
-
-Les rasters originaux et les checkpoints historiques réels n'étaient pas accessibles pour cette validation. L'entraînement de 150 époques et les scores du rapport n'ont pas été reproduits. Les tests sur des checkpoints historiques sont des contrôles de format reconstitué, pas une certification des fichiers de modèles du stage.
-
-L'exécution dans l'interface hébergée Google Colab, le rendu des widgets dans un navigateur Colab/VS Code et l'entraînement GPU restent à vérifier dans ces environnements. Les cellules, calculs et sorties ont été contrôlés localement.
-
-Les avertissements de dépréciation d'Affine/Rasterio dans l'environnement testé ne sont pas des erreurs de calcul. Le chargement d'un checkpoint historique signale explicitement les limites de reconstitution de son ancien split.
-
-Pour relancer les contrôles : installer les dépendances de développement puis exécuter `python -m pytest` à la racine du projet. La suite contient 33 tests.
