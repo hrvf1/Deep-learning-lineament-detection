@@ -23,9 +23,8 @@
 | Masque | 0/1 requis | Valeurs positives → 1, valeurs invalides → fond, comme dans le script |
 | Entrées invalides | Signalées comme erreur | Patches invalides exclus |
 | Seuil final | 0,50 | Maximum d'IoU validation, recherche de 0,05 à 0,95 par pas de 0,01 |
-| Métriques globales | Convention epsilon 10⁻⁷ au numérateur et dénominateur d'IoU/Dice/précision/rappel | Convention du script : epsilon 10⁻⁸ au dénominateur |
 
-La convention des masques vides diffère donc entre sources. Dans les tableaux **par patch**, un score non défini est noté NaN pour rendre les cas sans union ou sans prédiction visibles ; cela ne modifie pas les métriques globales de l'expérience.
+
 
 ## Changements d'organisation et contrôles ajoutés
 
